@@ -200,7 +200,6 @@ int main()
 			for (int j = 0; j <= orderArray; j++) {
 				cout << ((brd.unionIntArr[i] & mask) ? 1 : 0);
 				brd.unionIntArr[i] <<= 1;
-				//mask >>= 1;
 				if (!i && j == 11 || !i && !j || !i && j == 31) {
 					cout << " ";
 				}
@@ -245,7 +244,6 @@ int main()
 			for (int j = 0; j <= orderArray; j++) {
 				cout << ((brd.unionIntArr[i] & mask) ? 1 : 0);
 				brd.unionIntArr[i] <<= 1;
-				//mask >>= 1;
 				if (!i && j == 11 || !i && !j || !i && j == 31) {
 					cout << " ";
 				}
