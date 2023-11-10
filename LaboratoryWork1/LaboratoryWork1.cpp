@@ -51,9 +51,10 @@ int main()
 		}
 		cout << "\n";
 
-		cout << "Enter please value int number for display binary representation: ";
-		int numberUserInt;
+		int numberUserInt, tempNumber;
+		cout << "Enter please value int number for set some value bit: ";
 		cin >> numberUserInt;
+		tempNumber = numberUserInt;
 		int order = sizeof(numberUserInt) * 8 - 1;
 		int mask = 1 << order;
 
@@ -73,6 +74,61 @@ int main()
 		}
 		cout << "\n\n";
 
+		numberUserInt = tempNumber;
+
+		int positionUser;
+		cout << "Enter please position bit starting from one: ";
+		cin >> positionUser;
+
+		int numberBit;
+		cout << "Enter please number bit for change: ";
+		cin >> numberBit;
+
+		cout << "Enter please position bit = " << positionUser << " for set on " << numberBit << ".\n\n";
+		switch (numberBit)
+		{
+		case 0:
+			numberUserInt = (numberUserInt ^ (1 << positionUser - 1));
+			cout << "Number value: " << numberUserInt << "\n"
+				<< "Number link: " << &numberUserInt << "\n"
+				<< "Count rank: " << order << "\n"
+				<< "Bitwise comparison mask: " << mask << "\n";
+
+			for (int i = 0; i <= order; i++)
+			{
+				cout << ((numberUserInt & mask) ? 1 : 0);
+				numberUserInt <<= 1;
+				if (!i || (i + 1) % 8 == 0)
+				{
+					cout << " ";
+				}
+			}
+			cout << "\n\n";
+			break;
+		case 1:
+			numberUserInt = (numberUserInt | (1 << positionUser - 1));
+			cout << "Number value: " << numberUserInt << "\n"
+				<< "Number link: " << &numberUserInt << "\n"
+				<< "Count rank: " << order << "\n"
+				<< "Bitwise comparison mask: " << mask << "\n";
+
+			for (int i = 0; i <= order; i++)
+			{
+				cout << ((numberUserInt & mask) ? 1 : 0);
+				numberUserInt <<= 1;
+				if (!i || (i + 1) % 8 == 0)
+				{
+					cout << " ";
+				}
+			}
+			cout << "\n\n";
+			break;
+		default:
+			cout << "You entered a bit different from zero or one";
+			break;
+		}
+
+		float tempFloat;
 		union binaryRepresFloat {
 			int unionInt;
 			float unionFloat;
@@ -81,6 +137,39 @@ int main()
 		binaryRepresFloat brf;
 		cout << "Enter float number for display binary representation in memory: ";
 		cin >> brf.unionFloat;
+		tempFloat = brf.unionFloat;
+		for (int i = 0; i <= order; i++) {
+			cout << ((brf.unionInt & mask) ? 1 : 0);
+			brf.unionInt <<= 1;
+			if (!i || (i + 1) % 8 == 0) {
+				cout << " ";
+			}
+		};
+		cout << "\n\n";
+		brf.unionFloat = tempFloat;
+
+		cin.clear();
+
+		cout << "Enter please position bit starting from one: ";
+		cin >> positionUser;
+
+		cout << "Enter please number bit for change: ";
+		cin >> numberBit;
+
+		cout << "Enter please position bit = " << positionUser << " for set on " << numberBit << ".\n\n";
+		switch (numberBit)
+		{
+		case 0:
+			brf.unionInt = (brf.unionInt ^ (1 << positionUser - 1));
+			break;
+
+		case 1:
+			brf.unionInt = (brf.unionInt | (1 << positionUser - 1));
+			break;
+		default:
+			cout << "You entered a bit different from zero or one";
+			break;
+		}
 
 		for (int i = 0; i <= order; i++) {
 			cout << ((brf.unionInt & mask) ? 1 : 0);
@@ -88,10 +177,11 @@ int main()
 			if (!i || (i + 1) % 8 == 0) {
 				cout << " ";
 			}
-		}
+		};
 		cout << "\n\n";
 
 
+		double tempDouble;
 		union binaryRepresDouble {
 			int unionIntArr[2];
 			double unionDouble;
@@ -99,14 +189,59 @@ int main()
 		binaryRepresDouble brd;
 		cout << "Enter double number for display representation in memory: ";
 		cin >> brd.unionDouble;
-
+		tempDouble = brd.unionDouble;
 		int orderArray = sizeof(brd.unionIntArr) * 4 - 1;
 		int sizeIntegerArray = (sizeof(brd.unionIntArr) / sizeof(*brd.unionIntArr));
 		mask = 1 << orderArray;
 
 		swap(brd.unionIntArr[0], brd.unionIntArr[1]);
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < sizeIntegerArray; i++) {
+			for (int j = 0; j <= orderArray; j++) {
+				cout << ((brd.unionIntArr[i] & mask) ? 1 : 0);
+				brd.unionIntArr[i] <<= 1;
+				//mask >>= 1;
+				if (!i && j == 11 || !i && !j || !i && j == 31) {
+					cout << " ";
+				}
+			}
+		}
+		brd.unionDouble = tempDouble;
+		cout << "\n\n";
+
+		swap(brd.unionIntArr[0], brd.unionIntArr[1]);
+
+		cin.clear();
+
+		cout << "Enter please position bit starting from one: ";
+		cin >> positionUser;
+
+		cout << "Enter please number bit for change: ";
+		cin >> numberBit;
+
+		cout << "Enter please position bit = " << positionUser << " for set on " << numberBit << ".\n\n";
+		switch (numberBit)
+		{
+		case 0:
+			if (positionUser - 1 <= 32)
+				brd.unionIntArr[1] = brd.unionIntArr[1] ^ (1 << positionUser - 1);
+			else
+				brd.unionIntArr[0] = brd.unionIntArr[0] ^ (1 << (positionUser - 1 - 32));
+
+			break;
+		case 1:
+			if (positionUser - 1 <= 32)
+				brd.unionIntArr[1] = brd.unionIntArr[1] | (1 << positionUser - 1);
+			else
+				brd.unionIntArr[0] = brd.unionIntArr[0] | (1 << (positionUser - 1 - 32));
+
+			break;
+		default:
+			cout << "You entered a bit different from zero or one";
+			break;
+		}
+
+		for (int i = 0; i < sizeIntegerArray; i++) {
 			for (int j = 0; j <= orderArray; j++) {
 				cout << ((brd.unionIntArr[i] & mask) ? 1 : 0);
 				brd.unionIntArr[i] <<= 1;
@@ -138,6 +273,5 @@ int main()
 			break;
 		}
 	}
-
 	return 0;
 }
